@@ -69,7 +69,7 @@ const Answer: FC<IAnswerProps> = ({
   isResponsing,
   allToolIcons,
 }) => {
-  const { id, content, feedback, agent_thoughts } = item
+  const { id, content, feedback, agent_thoughts, suggested_questions } = item
   const isAgentMode = !!agent_thoughts && agent_thoughts.length > 0
 
   const { t } = useTranslation()
@@ -186,8 +186,13 @@ const Answer: FC<IAnswerProps> = ({
                 : (isAgentMode
                   ? agentModeAnswer
                   : (
-                    <Markdown content={content} />
-                  ))}
+                    <div>
+                      <Markdown content={content} />
+                      {suggested_questions ? (<button>{suggested_questions}</button>) : ''}
+                    </div>
+                  )
+                )
+              }
             </div>
             <div className='absolute top-[-14px] right-[-14px] flex flex-row justify-end gap-1'>
               {!feedbackDisabled && !item.feedbackDisabled && renderItemOperation()}
