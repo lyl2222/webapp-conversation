@@ -179,10 +179,12 @@ const Main: FC = () => {
   const canEditInpus = !chatList.some(item => item.isAnswer === false) && isNewConversation
   const createNewChat = () => {
     // if new chat is already exist, do not create new chat
-    if (conversationList.some(item => item.id === '-1'))
+    if (conversationList && conversationList.some(item => item.id === '-1'))
       return
 
     setConversationList(produce(conversationList, (draft) => {
+      if (!draft)
+        return
       draft.unshift({
         id: '-1',
         name: t('app.chat.newChatDefaultName'),
@@ -205,6 +207,7 @@ const Main: FC = () => {
       isAnswer: true,
       feedbackDisabled: true,
       isOpeningStatement: isShowPrompt,
+      suggested_questions: currConversationInfo?.suggested_questions,
     }
     if (caculatedIntroduction)
       return [openstatement]
@@ -223,16 +226,18 @@ const Main: FC = () => {
         const [conversationData, appParams] = await Promise.all([fetchConversations(), fetchAppParams()])
 
         // handle current conversation id
-        const { data: conversations } = conversationData as { data: ConversationItem[] }
+        const { data: conversations } = conversationData as { data: ConversationItem[] } || []
         const _conversationId = getConversationIdFromStorage(APP_ID)
-        const isNotNewConversation = conversations.some(item => item.id === _conversationId)
+
+        const isNotNewConversation = conversations?.some(item => item.id === _conversationId)
 
         // fetch new conversation info
-        const { user_input_form, opening_statement: introduction, file_upload, system_parameters }: any = appParams
+        const { user_input_form, opening_statement: introduction, file_upload, system_parameters, suggested_questions }: any = appParams
         setLocaleOnClient(APP_INFO.default_language, true)
         setNewConversationInfo({
           name: t('app.chat.newChatDefaultName'),
           introduction,
+          suggested_questions,
         })
         const prompt_variables = userInputsFormToPromptVariables(user_input_form)
         setPromptConfig({
@@ -243,6 +248,7 @@ const Main: FC = () => {
           ...file_upload?.image,
           image_file_size_limit: system_parameters?.system_parameters || 0,
         })
+        console.log(conversations, 'conversations')
         setConversationList(conversations as ConversationItem[])
 
         if (isNotNewConversation)
@@ -251,7 +257,9 @@ const Main: FC = () => {
         setInited(true)
       }
       catch (e: any) {
+        console.log(e, 'true')
         if (e.status === 404) {
+          console.log('404')
           setAppUnavailable(true)
         }
         else {
