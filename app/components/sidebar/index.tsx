@@ -2,8 +2,7 @@ import React from 'react'
 import type { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
-  ChatBubbleOvalLeftEllipsisIcon,
-  PencilSquareIcon,
+  ChatBubbleOvalLeftEllipsisIcon, IdentificationIcon, InformationCircleIcon, PencilSquareIcon,
 } from '@heroicons/react/24/outline'
 import { ChatBubbleOvalLeftEllipsisIcon as ChatBubbleOvalLeftEllipsisSolidIcon } from '@heroicons/react/24/solid'
 import Button from '@/app/components/base/button'
@@ -27,7 +26,7 @@ const Sidebar: FC<ISidebarProps> = ({
   copyRight,
   currentId,
   onCurrentIdChange,
-  list,
+  list = [],
 }) => {
   const { t } = useTranslation()
   return (
@@ -77,7 +76,14 @@ const Sidebar: FC<ISidebarProps> = ({
       {/* <a className="flex flex-shrink-0 p-4" href="https://langgenius.ai/" target="_blank">
         <Card><div className="flex flex-row items-center"><ChatBubbleOvalLeftEllipsisSolidIcon className="text-primary-600 h-6 w-6 mr-2" /><span>LangGenius</span></div></Card>
       </a> */}
-      <div className="flex flex-shrink-0 pr-4 pb-4 pl-4">
+      <div className=" flex items-center p-2 pl-4 text-gray-700 hover:bg-gray-100 hover:text-primary-600">
+        <IdentificationIcon className="mr-2 h-4 w-4" />
+        <a className="font-medium cursor-pointer text-sm" href="https://nebula-cn.com/#/" target="_blank">Produce</a></div>
+      <div className=" flex items-center p-2 pl-4 text-gray-700 hover:bg-gray-100 hover:text-primary-600">
+        <InformationCircleIcon className="mr-2 h-4 w-4" />
+        <a className="font-medium cursor-pointer text-sm" href="https://nebula-cn.com/#/product" target="_blank">DFMEA</a></div>
+      <div className="mt-6 flex flex-shrink-0 pr-4 pb-4 pl-4">
+
         <div className="text-gray-400 font-normal text-xs">© {copyRight} {(new Date()).getFullYear()}</div>
       </div>
     </div>
